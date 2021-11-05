@@ -1,29 +1,37 @@
 import { Component } from "react";
 import Searchbar from "./components/Searchbar/Searchbar";
 import { getPictures } from "./service/api";
+// getPictures();
 
 class App extends Component {
-  state = {};
-
-  getImg = () => {
-    getPictures(this.state.query, this.state.page)
-      .then((articles) =>
-        this.setState((prev) => ({
-          articles: [...prev.articles, ...articles],
-        }))
-      )
-      .catch((err) => this.setState({ error: err }))
-      .finally(() => this.setState({ isLoading: false }));
+  state = {
+    pictures: [],
+    // page,
+    // isLoading
+    // query,
   };
+  componentDidMount() {
+    getPictures()
+      .then((pictures) => {
+        this.setState({ pictures });
+      })
+      .catch((err) => this.setState({ error: err }));
+    // .finally(() => this.setState({ isLoading: false }));
+  }
+  onSearch = () => {};
 
   render() {
-    // this.getImg();
+    const {
+      pictures: { hits },
+    } = this.state;
     return (
       <div className="App">
         <Searchbar />
+        {hits && hits.map((item) => console.log(item))}
       </div>
     );
   }
 }
 
 export default App;
+//cfs
