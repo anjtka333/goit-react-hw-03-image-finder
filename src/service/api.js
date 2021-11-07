@@ -1,6 +1,7 @@
 import axios from "axios";
 require("dotenv").config();
-console.log(process.env); // як записати в env API_KEY?
+// console.log(process.env);
+// як записати в env API_KEY?
 
 const API_KEY = "d335026227984500a8905e832ae515ac";
 
