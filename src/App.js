@@ -58,7 +58,6 @@ class App extends Component {
   }
   handleChangePage = () => {
     this.setState((prevState) => ({ page: prevState.page + 1 }));
-    console.log(this.state.page);
   };
   handleModalShow = (modalUrl, modalTitle) => {
     this.setState({ modalTitle });
@@ -83,7 +82,7 @@ class App extends Component {
             <Loader type="Hearts" color="#3F51B5" height={80} width={80} />
           </div>
         )}
-        {this.state.pictures.length > 0 && (
+        {this.state.pictures.length > 12 && (
           <Button cbOnClick={this.handleChangePage} />
         )}
         {this.state.showModal && (
