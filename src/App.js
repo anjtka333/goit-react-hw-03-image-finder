@@ -16,19 +16,18 @@ class App extends Component {
     showModal: false,
     modalTitle: "",
     modalUrl: "",
+    largeImageURL: "",
   };
 
   componentDidUpdate(prevProps, prevState) {
     if (this.state.query !== prevState.query && this.state.page === 1) {
-      this.setState({ isLoading: true });
       this.getData();
+      this.setState({ pictures: [] });
     }
     if (this.state.page !== prevState.page) {
-      this.setState({ isLoading: true });
       this.getData();
     }
     if (this.state.query !== prevState.query && this.state.page !== 1) {
-      this.setState({ isLoading: true });
       this.setState({ page: 1, pictures: [] });
     }
   }
@@ -41,34 +40,36 @@ class App extends Component {
     this.setState({ query });
   };
   getData() {
-    getPictures(this.state.query, this.state.page)
+    this.setState({ isLoading: true });
+    getPictures(this.state.query.trim(), this.state.page)
       .then((pictures) => {
+        if (pictures.length === 0) alert("No search result");
         this.setState((prevState) => ({
           pictures: [...prevState.pictures, ...pictures],
         }));
       })
       .catch((err) => this.setState({ error: err }))
       .finally(() => {
-        window.scrollTo({
-          top: document.documentElement.scrollHeight,
-          behavior: "smooth",
-        });
+        if (this.state.page !== 1) {
+          window.scrollTo({
+            top: document.documentElement.scrollHeight,
+            behavior: "smooth",
+          });
+        }
         this.setState({ isLoading: false });
       });
   }
   handleChangePage = () => {
     this.setState((prevState) => ({ page: prevState.page + 1 }));
   };
-  handleModalShow = (modalUrl, modalTitle) => {
+  handleModalShow = (largeImageURL, modalTitle) => {
     this.setState({ modalTitle });
-    this.setState({ modalUrl });
+    this.setState({ largeImageURL });
     this.toggleModal();
   };
 
   render() {
-    const {
-      pictures: { hits },
-    } = this.state;
+    console.log(this.state.pictures);
     return (
       <div className={s.App}>
         <Searchbar onSubmit={this.changeQuery} />
@@ -82,13 +83,13 @@ class App extends Component {
             <Loader type="Hearts" color="#3F51B5" height={80} width={80} />
           </div>
         )}
-        {this.state.pictures.length > 12 && (
+        {this.state.pictures.length >= 12 && (
           <Button cbOnClick={this.handleChangePage} />
         )}
         {this.state.showModal && (
           <Modal
             onClose={this.toggleModal}
-            modalUrl={this.state.modalUrl}
+            modalUrl={this.state.largeImageURL}
             modalTitle={this.state.modalTitle}
           />
         )}
