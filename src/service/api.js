@@ -1,9 +1,7 @@
 import axios from "axios";
 require("dotenv").config();
-// console.log(process.env);
-// як записати в env API_KEY?
 
-const API_KEY = "d335026227984500a8905e832ae515ac";
+const API_KEY = process.env.REACT_APP_API_KEY;
 
 axios.defaults.baseURL = "https://newsapi.org/v2/";
 
@@ -16,6 +14,7 @@ export const getPictures = (query, page) => {
     per_page: 12,
     page,
   });
+
   return axios
     .get(`everything`)
     .then(({ data }) => {
